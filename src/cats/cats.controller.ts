@@ -2,11 +2,11 @@
  * @Author: 梁楷文 lkw199711@163.com
  * @Date: 2024-04-24 16:31:31
  * @LastEditors: 梁楷文 lkw199711@163.com
- * @LastEditTime: 2024-05-03 17:50:34
+ * @LastEditTime: 2024-05-04 10:23:49
  * @FilePath: \smanga-node\src\cats\cats.controller.ts
  * @Description: 调试模块
  */
-import { Controller, Get, Param, Req } from '@nestjs/common';
+import { Controller, Get, Param, Req, Post } from '@nestjs/common';
 import { log } from 'console';
 import { Request } from 'express';
 
@@ -17,42 +17,33 @@ import { User } from 'src/user.entity';
 
 @Controller('cats')
 export class CatsController {
-  @Get()
-  findAll(@Req() request: Request): string {
-    return 'This action returns all cats';
-  }
-  @Get(':id')
-  findOne(@Param('id') id: string): string {
-    log(id);
-    return `This action returns a #${id} cat`;
-  }
-}
-
-@Injectable()
-export class UserService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
   ) {}
 
-  async findAll(): Promise<User[]> {
-    return await this.userRepository.find();
+  @Get()
+  findAll(@Req() request: Request): string {
+    return 'This action returns all cats';
   }
 
-  async findOne(id: number): Promise<User> {
-    return await this.userRepository.findOne(id);
-  }
+  // @Get(':id')
+  // findOne(@Param('id1') id1: string): string {
+  //   log(id1);
+  //   return `This action returns a #${id1} cat`;
+  // }
 
-  async create(user: User): Promise<User> {
-    return await this.userRepository.save(user);
-  }
+  @Get(':id')
+  async create(): Promise<string> {
+    const user: User = {
+      id: null,
+      name: 'Kitty',
+      age: 3,
+    };
 
-  async update(id: number, user: User): Promise<User> {
-    await this.userRepository.update(id, user);
-    return this.findOne(id);
-  }
+    await this.userRepository.save(user);
 
-  async remove(id: number): Promise<void> {
-    await this.userRepository.delete(id);
+    return 'New cat record has been created!';
   }
 }
+
