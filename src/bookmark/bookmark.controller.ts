@@ -11,7 +11,6 @@ import { BookmarkService } from './bookmark.service';
 import { CreateBookmarkDto } from './dto/create-bookmark.dto';
 import { UpdateBookmarkDto } from './dto/update-bookmark.dto';
 import { SResponse } from 'src/interfaces/response.interface';
-import { log } from 'console';
 
 @Controller('bookmark')
 export class BookmarkController {
@@ -19,7 +18,7 @@ export class BookmarkController {
 
   @Post()
   async create(@Body() createBookmarkDto: CreateBookmarkDto) {
-    try {
+
       const saveBookmark = await this.bookmarkService.create(createBookmarkDto);
 
       const response: SResponse = {
@@ -29,14 +28,7 @@ export class BookmarkController {
       };
 
       return response;
-    } catch (err) {
-      log(err);
-      return {
-        code: 1,
-        message: '添加失败',
-        data: err,
-      };
-    }
+
   }
 
   @Get()
@@ -59,6 +51,11 @@ export class BookmarkController {
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.bookmarkService.remove(+id);
+    const res = this.bookmarkService.remove(+id);
+    return {
+      code: 0,
+      message: '删除成功',
+      data: res,
+    };
   }
 }

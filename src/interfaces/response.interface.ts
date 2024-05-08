@@ -15,6 +15,7 @@ export interface SResponse {
   code: number;
   message: string;
   data?: any;
+  error?: any;
 }
 
 /**
