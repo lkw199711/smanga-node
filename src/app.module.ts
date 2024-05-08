@@ -17,6 +17,7 @@ import { BookmarkModule } from './bookmark/bookmark.module';
 import { APP_FILTER } from '@nestjs/core';
 import { DatabaseExceptionFilter } from './filter/database-exception.filter';
 import { HttpExceptionFilter } from './filter/error.filter';
+import { ChapterModule } from './chapter/chapter.module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { HttpExceptionFilter } from './filter/error.filter';
     TypeOrmModule.forFeature([User]),
     DemoModule,
     BookmarkModule,
+    ChapterModule,
   ],
   controllers: [AppController, CatsController],
   providers: [

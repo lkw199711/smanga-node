@@ -18,17 +18,14 @@ export class BookmarkController {
 
   @Post()
   async create(@Body() createBookmarkDto: CreateBookmarkDto) {
+    const saveBookmark = await this.bookmarkService.create(createBookmarkDto);
+    const response = new SResponse({
+      code: 0,
+      message: '创建成功',
+      data: saveBookmark,
+    });
 
-      const saveBookmark = await this.bookmarkService.create(createBookmarkDto);
-
-      const response: SResponse = {
-        code: 0,
-        message: '添加成功',
-        data: saveBookmark,
-      };
-
-      return response;
-
+    return response;
   }
 
   @Get()
@@ -37,21 +34,35 @@ export class BookmarkController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.bookmarkService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    const bookmarkTarget = await this.bookmarkService.findOne(+id);
+    const response = new SResponse({
+      code: 0,
+      message: '查询成功',
+      data: bookmarkTarget,
+    });
+
+    return response;
   }
 
   @Patch(':id')
-  update(
+  async update(
     @Param('id') id: string,
     @Body() updateBookmarkDto: UpdateBookmarkDto,
   ) {
-    return this.bookmarkService.update(+id, updateBookmarkDto);
+    const res = await this.bookmarkService.update(+id, updateBookmarkDto);
+    const response = new SResponse({
+      code: 0,
+      message: '更新成功',
+      data: res,
+    });
+
+    return response;
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    const res = this.bookmarkService.remove(+id);
+  async remove(@Param('id') id: string) {
+    const res = await this.bookmarkService.remove(+id);
     return {
       code: 0,
       message: '删除成功',

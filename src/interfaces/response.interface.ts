@@ -2,7 +2,7 @@
  * @Author: 梁楷文 lkw199711@163.com
  * @Date: 2024-05-07 20:08:19
  * @LastEditors: 梁楷文 lkw199711@163.com
- * @LastEditTime: 2024-05-07 20:12:05
+ * @LastEditTime: 2024-05-08 18:52:29
  * @FilePath: \smanga-node\src\interfaces\response.interface.ts
  * @Description: 公用返回格式
  */
@@ -11,18 +11,32 @@
  * @description: 公共返回格式
  * @return {*}
  */
-export interface SResponse {
+export interface ResponseInterface {
   code: number;
   message: string;
   data?: any;
   error?: any;
 }
 
+export class SResponse implements ResponseInterface {
+  code: number;
+  message: string;
+  data?: any;
+  error?: any;
+
+  constructor(sResponse: SResponse = { code: 0, message: '操作成功' }) {
+    this.code = sResponse.code ?? 0;
+    this.message = sResponse.message ?? '';
+    this.data = sResponse.data ?? '';
+    this.error = sResponse.error ?? '';
+  }
+}
+
 /**
  * @description: 列表返回格式
  * @return {*}
  */
-export interface ListResponse extends SResponse {
+export interface ListResponseInterface extends ResponseInterface {
   list: [];
   count: number;
 }
