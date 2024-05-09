@@ -4,7 +4,7 @@
  * @LastEditors: 梁楷文 lkw199711@163.com
  * @LastEditTime: 2024-05-08 18:30:20
  * @FilePath: \smanga-node\src\bookmark\bookmark.service.ts
- * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ * @Description: 书签表服务
  */
 import { Injectable, Param, NotFoundException } from '@nestjs/common';
 import { CreateBookmarkDto } from './dto/create-bookmark.dto';
@@ -12,7 +12,6 @@ import { UpdateBookmarkDto } from './dto/update-bookmark.dto';
 import { Repository, Like, FindOneOptions } from 'typeorm';
 import { Bookmark } from './entities/bookmark.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { throwError } from 'rxjs';
 
 @Injectable()
 export class BookmarkService {

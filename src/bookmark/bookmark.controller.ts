@@ -10,7 +10,7 @@ import {
 import { BookmarkService } from './bookmark.service';
 import { CreateBookmarkDto } from './dto/create-bookmark.dto';
 import { UpdateBookmarkDto } from './dto/update-bookmark.dto';
-import { SResponse } from 'src/interfaces/response.interface';
+import { ListResponse, SResponse } from 'src/interfaces/response.interface';
 
 @Controller('bookmark')
 export class BookmarkController {
@@ -29,8 +29,16 @@ export class BookmarkController {
   }
 
   @Get()
-  findAll() {
-    return this.bookmarkService.findAll();
+  async findAll() {
+    const listResponse = await this.bookmarkService.findAll();
+    const response = new ListResponse({
+      code: 0,
+      message: '查询成功',
+      list: listResponse.list,
+      count: listResponse.count,
+    });
+
+    return response;
   }
 
   @Get(':id')

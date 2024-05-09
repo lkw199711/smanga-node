@@ -2,7 +2,7 @@
  * @Author: 梁楷文 lkw199711@163.com
  * @Date: 2024-05-08 18:57:01
  * @LastEditors: 梁楷文 lkw199711@163.com
- * @LastEditTime: 2024-05-08 19:22:43
+ * @LastEditTime: 2024-05-09 10:14:31
  * @FilePath: \smanga-node\src\chapter\entities\chapter.entity.ts
  * @Description: 章节表实体
  */
@@ -18,23 +18,37 @@ import {
 @Index('oname', ['mangaId', 'chapterName'], { unique: true })
 @Entity('chapter', { schema: 'smanga' })
 export class Chapter {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({ unsigned: true, comment: '章节id' })
   chapterId: number;
 
-  @Column('int', { name: 'mangaId', nullable: false, comment: '漫画id' })
+  @Column('int', {
+    name: 'mangaId',
+    unsigned: true,
+    nullable: false,
+    comment: '漫画id',
+  })
   mangaId: number;
 
-  @Column('int', { name: 'mediaId', nullable: false, comment: '媒体库id' })
+  @Column('int', {
+    name: 'mediaId',
+    nullable: false,
+    unsigned: true,
+    comment: '媒体库id',
+  })
   mediaId: number;
 
-  @Column('int', { name: 'pathId', nullable: false, comment: '路径id' })
+  @Column('int', {
+    name: 'pathId',
+    nullable: false,
+    unsigned: true,
+    comment: '路径id',
+  })
   pathId: number;
 
   @Column('varchar', {
     name: 'chapterName',
     nullable: false,
     comment: '章节名称',
-    length: 191,
   })
   chapterName: string;
 
@@ -42,7 +56,6 @@ export class Chapter {
     name: 'chapterPath',
     nullable: false,
     comment: '章节路径',
-    length: 191,
   })
   chapterPath: string;
 
@@ -50,19 +63,17 @@ export class Chapter {
     name: 'chapterType',
     nullable: false,
     comment: '文件类型',
-    length: 191,
     default: 'image',
   })
   chapterType: string;
 
-  @Column({ default: 'flow' })
+  @Column({ default: 'flow', comment: '浏览类型' })
   browseType: 'flow' | 'single' | 'double' | 'half';
 
   @Column('varchar', {
     name: 'chapterCover',
     nullable: true,
     comment: '章节封面',
-    length: 191,
   })
   chapterCover: string | null;
 
@@ -70,16 +81,20 @@ export class Chapter {
     name: 'subTitle',
     nullable: true,
     comment: '副标题 用于搜索',
-    length: 255,
   })
   subTitle: string | null;
 
-  @Column('int', { name: 'picNum', nullable: true, comment: '图片数量' })
+  @Column('int', {
+    name: 'picNum',
+    nullable: true,
+    unsigned: true,
+    comment: '图片数量',
+  })
   picNum: number | null;
 
-  @CreateDateColumn({ type: 'datetime' })
+  @CreateDateColumn({ type: 'datetime', comment: '创建时间' })
   createTime: Date;
 
-  @UpdateDateColumn({ type: 'datetime' })
+  @UpdateDateColumn({ type: 'datetime', comment: '更新时间' })
   updateTime: Date;
 }

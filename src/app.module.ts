@@ -2,16 +2,14 @@
  * @Author: 梁楷文 lkw199711@163.com
  * @Date: 2024-04-24 15:24:38
  * @LastEditors: 梁楷文 lkw199711@163.com
- * @LastEditTime: 2024-05-08 10:52:00
+ * @LastEditTime: 2024-05-09 08:59:50
  * @FilePath: \smanga-node\src\app.module.ts
  * @Description:
  */
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { CatsController } from './cats/cats.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './user.entity';
 import { DemoModule } from './demo/demo.module';
 import { BookmarkModule } from './bookmark/bookmark.module';
 import { APP_FILTER } from '@nestjs/core';
@@ -34,17 +32,19 @@ import { ChapterModule } from './chapter/chapter.module';
       host: 'localhost',
       port: 3306,
       database: 'smanga1',
+      charset: 'utf8mb4',
+      // collation: 'utf8mb4_unicode_ci',
       autoLoadEntities: true,
       synchronize: true, // 是否自动同步数据库结构，生产环境应该设为 false
       retryDelay: 500,
       retryAttempts: 1,
     }),
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([]),
     DemoModule,
     BookmarkModule,
     ChapterModule,
   ],
-  controllers: [AppController, CatsController],
+  controllers: [AppController],
   providers: [
     AppService,
     {
