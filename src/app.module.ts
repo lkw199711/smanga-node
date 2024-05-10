@@ -16,6 +16,23 @@ import { APP_FILTER } from '@nestjs/core';
 import { DatabaseExceptionFilter } from './filter/database-exception.filter';
 import { HttpExceptionFilter } from './filter/error.filter';
 import { ChapterModule } from './chapter/chapter.module';
+import { CollectModule } from './collect/collect.module';
+import { CompressModule } from './compress/compress.module';
+import { HistoryModule } from './history/history.module';
+import { LogModule } from './log/log.module';
+import { LoginModule } from './login/login.module';
+import { MangaModule } from './manga/manga.module';
+import { MangaTagModule } from './manga-tag/manga-tag.module';
+import { MediaModule } from './media/media.module';
+import { MetaModule } from './meta/meta.module';
+import { PathModule } from './path/path.module';
+import { ScanModule } from './scan/scan.module';
+import { TagModule } from './tag/tag.module';
+import { VersionModule } from './version/version.module';
+import { UserModule } from './user/user.module';
+import { UserPermissonModule } from './user-permisson/user-permisson.module';
+import { MediaPermissonModule } from './media-permisson/media-permisson.module';
+import { LatestModule } from './latest/latest.module';
 
 @Module({
   imports: [
@@ -43,6 +60,23 @@ import { ChapterModule } from './chapter/chapter.module';
     DemoModule,
     BookmarkModule,
     ChapterModule,
+    CollectModule,
+    CompressModule,
+    HistoryModule,
+    LogModule,
+    LoginModule,
+    MangaModule,
+    MangaTagModule,
+    MediaModule,
+    MetaModule,
+    PathModule,
+    ScanModule,
+    TagModule,
+    VersionModule,
+    UserModule,
+    UserPermissonModule,
+    MediaPermissonModule,
+    LatestModule,
   ],
   controllers: [AppController],
   providers: [
