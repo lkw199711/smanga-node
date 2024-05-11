@@ -2,33 +2,70 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { LatestService } from './latest.service';
 import { CreateLatestDto } from './dto/create-latest.dto';
 import { UpdateLatestDto } from './dto/update-latest.dto';
+import { ListResponse, SResponse } from 'src/interfaces/response.interface';
 
 @Controller('latest')
 export class LatestController {
   constructor(private readonly latestService: LatestService) {}
 
   @Post()
-  create(@Body() createLatestDto: CreateLatestDto) {
-    return this.latestService.create(createLatestDto);
+  async create(@Body() createLatestDto: CreateLatestDto) {
+    const result = await this.latestService.create(createLatestDto);
+    const response = new SResponse({
+      code: 0,
+      message: '新增成功',
+      data: result,
+    });
+
+    return response;
   }
 
   @Get()
-  findAll() {
-    return this.latestService.findAll();
+  async findAll() {
+    const listResponse = await this.latestService.findAll();
+    const response = new ListResponse({
+      code: 0,
+      message: '查询成功',
+      list: listResponse.list,
+      count: listResponse.count,
+    });
+
+    return response;
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.latestService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    const result = await this.latestService.findOne(+id);
+    const response = new SResponse({
+      code: 0,
+      message: '查询成功',
+      data: result,
+    });
+
+    return response;
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateLatestDto: UpdateLatestDto) {
-    return this.latestService.update(+id, updateLatestDto);
+  async update(@Param('id') id: string, @Body() updateLatestDto: UpdateLatestDto) {
+    const result = await this.latestService.update(+id, updateLatestDto);
+    const response = new SResponse({
+      code: 0,
+      message: '更新成功',
+      data: result,
+    });
+
+    return response;
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.latestService.remove(+id);
+  async remove(@Param('id') id: string) {
+    const result = await this.latestService.remove(+id);
+    const response = new SResponse({
+      code: 0,
+      message: '删除成功',
+      data: result,
+    });
+
+    return response;
   }
 }

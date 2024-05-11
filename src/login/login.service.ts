@@ -1,26 +1,46 @@
 import { Injectable } from '@nestjs/common';
 import { CreateLoginDto } from './dto/create-login.dto';
 import { UpdateLoginDto } from './dto/update-login.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Login } from './entities/login.entity';
 
 @Injectable()
 export class LoginService {
-  create(createLoginDto: CreateLoginDto) {
-    return 'This action adds a new login';
+  constructor(
+    @InjectRepository(Login)
+    private readonly loginRepository: Repository<Login>,
+  ) { }
+  
+  async create(createLoginDto: CreateLoginDto) {
+    return await this.loginRepository.save(createLoginDto);
   }
 
-  findAll() {
-    return `This action returns all login`;
+  async findAll() {
+    const list = await this.loginRepository.find();
+    const count = await this.loginRepository.count();
+
+    return {
+      list,
+      count,
+    };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} login`;
+  async findOne(id: number) {
+    const options = {
+      where: {
+        loginId: id,
+      },
+    };
+
+    return this.loginRepository.findOne(options);
   }
 
-  update(id: number, updateLoginDto: UpdateLoginDto) {
-    return `This action updates a #${id} login`;
+  async update(id: number, updateLoginDto: UpdateLoginDto) {
+    return this.loginRepository.update(id, updateLoginDto);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} login`;
+  async remove(id: number) {
+    return this.loginRepository.delete(id);
   }
 }

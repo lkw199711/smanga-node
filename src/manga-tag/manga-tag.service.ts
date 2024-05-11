@@ -1,26 +1,46 @@
 import { Injectable } from '@nestjs/common';
 import { CreateMangaTagDto } from './dto/create-manga-tag.dto';
 import { UpdateMangaTagDto } from './dto/update-manga-tag.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { MangaTag } from './entities/manga-tag.entity';
 
 @Injectable()
 export class MangaTagService {
-  create(createMangaTagDto: CreateMangaTagDto) {
-    return 'This action adds a new mangaTag';
+  constructor(
+    @InjectRepository(MangaTag)
+    private readonly mangaTagRepository: Repository<MangaTag>,
+  ) { }
+
+  async create(createMangaTagDto: CreateMangaTagDto) {
+    return await this.mangaTagRepository.save(createMangaTagDto);
   }
 
-  findAll() {
-    return `This action returns all mangaTag`;
+  async findAll() {
+    const list = await this.mangaTagRepository.find();
+    const count = await this.mangaTagRepository.count();
+
+    return {
+      list,
+      count,
+    };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} mangaTag`;
+  async findOne(id: number) {
+    const options = {
+      where: {
+        mangaTagId: id,
+      },
+    };
+
+    return this.mangaTagRepository.findOne(options);
   }
 
-  update(id: number, updateMangaTagDto: UpdateMangaTagDto) {
-    return `This action updates a #${id} mangaTag`;
+  async update(id: number, updateMangaTagDto: UpdateMangaTagDto) {
+    return this.mangaTagRepository.update(id, updateMangaTagDto);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} mangaTag`;
+  async remove(id: number) {
+    return this.mangaTagRepository.delete(id);
   }
 }

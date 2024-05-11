@@ -2,33 +2,71 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { LoginService } from './login.service';
 import { CreateLoginDto } from './dto/create-login.dto';
 import { UpdateLoginDto } from './dto/update-login.dto';
+import { ListResponse, SResponse } from 'src/interfaces/response.interface';
+
 
 @Controller('login')
 export class LoginController {
   constructor(private readonly loginService: LoginService) {}
 
   @Post()
-  create(@Body() createLoginDto: CreateLoginDto) {
-    return this.loginService.create(createLoginDto);
+  async create(@Body() createLoginDto: CreateLoginDto) {
+    const result = await this.loginService.create(createLoginDto);
+    const response = new SResponse({
+      code: 0,
+      message: '新增成功',
+      data: result,
+    });
+
+    return response;
   }
 
   @Get()
-  findAll() {
-    return this.loginService.findAll();
+  async findAll() {
+    const listResponse = await this.loginService.findAll();
+    const response = new ListResponse({
+      code: 0,
+      message: '查询成功',
+      list: listResponse.list,
+      count: listResponse.count,
+    });
+
+    return response;
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.loginService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    const result = await this.loginService.findOne(+id);
+    const response = new SResponse({
+      code: 0,
+      message: '查询成功',
+      data: result,
+    });
+
+    return response;
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateLoginDto: UpdateLoginDto) {
-    return this.loginService.update(+id, updateLoginDto);
+  async update(@Param('id') id: string, @Body() updateLoginDto: UpdateLoginDto) {
+    const result = await this.loginService.update(+id, updateLoginDto);
+    const response = new SResponse({
+      code: 0,
+      message: '更新成功',
+      data: result,
+    });
+
+    return response;
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.loginService.remove(+id);
+  async remove(@Param('id') id: string) {
+    const result = await this.loginService.remove(+id);
+    const response = new SResponse({
+      code: 0,
+      message: '删除成功',
+      data: result,
+    });
+
+    return response;
   }
 }

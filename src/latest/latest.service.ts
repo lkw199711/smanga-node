@@ -1,26 +1,46 @@
 import { Injectable } from '@nestjs/common';
 import { CreateLatestDto } from './dto/create-latest.dto';
 import { UpdateLatestDto } from './dto/update-latest.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Latest } from './entities/latest.entity';
 
 @Injectable()
 export class LatestService {
-  create(createLatestDto: CreateLatestDto) {
-    return 'This action adds a new latest';
+  constructor(
+    @InjectRepository(Latest)
+    private readonly latestRepository: Repository<Latest>,
+  ) { }
+  
+  async create(createLatestDto: CreateLatestDto) {
+    return await this.latestRepository.save(createLatestDto);
   }
 
-  findAll() {
-    return `This action returns all latest`;
+  async findAll() {
+    const list = await this.latestRepository.find();
+    const count = await this.latestRepository.count();
+
+    return {
+      list,
+      count,
+    };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} latest`;
+  async findOne(id: number) {
+    const options = {
+      where: {
+        latestId: id,
+      },
+    };
+
+    return this.latestRepository.findOne(options);
   }
 
-  update(id: number, updateLatestDto: UpdateLatestDto) {
-    return `This action updates a #${id} latest`;
+  async update(id: number, updateLatestDto: UpdateLatestDto) {
+    return this.latestRepository.update(id, updateLatestDto);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} latest`;
+  async remove(id: number) {
+    return this.latestRepository.delete(id);
   }
 }
