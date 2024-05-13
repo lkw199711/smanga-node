@@ -2,33 +2,70 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { UserPermissonService } from './user-permisson.service';
 import { CreateUserPermissonDto } from './dto/create-user-permisson.dto';
 import { UpdateUserPermissonDto } from './dto/update-user-permisson.dto';
+import { ListResponse, SResponse } from 'src/interfaces/response.interface';
 
 @Controller('user-permisson')
 export class UserPermissonController {
   constructor(private readonly userPermissonService: UserPermissonService) {}
 
   @Post()
-  create(@Body() createUserPermissonDto: CreateUserPermissonDto) {
-    return this.userPermissonService.create(createUserPermissonDto);
+  async create(@Body() createUserPermissonDto: CreateUserPermissonDto) {
+    const result = await this.userPermissonService.create(createUserPermissonDto);
+    const response = new SResponse({
+      code: 0,
+      message: '新增成功',
+      data: result,
+    });
+
+    return response;
   }
 
   @Get()
-  findAll() {
-    return this.userPermissonService.findAll();
+  async findAll() {
+    const listResponse = await this.userPermissonService.findAll();
+    const response = new ListResponse({
+      code: 0,
+      message: '查询成功',
+      list: listResponse.list,
+      count: listResponse.count,
+    });
+
+    return response;
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userPermissonService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    const result = await this.userPermissonService.findOne(+id);
+    const response = new SResponse({
+      code: 0,
+      message: '查询成功',
+      data: result,
+    });
+
+    return response;
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserPermissonDto: UpdateUserPermissonDto) {
-    return this.userPermissonService.update(+id, updateUserPermissonDto);
+  async update(@Param('id') id: string, @Body() updateUserPermissonDto: UpdateUserPermissonDto) {
+    const result = await this.userPermissonService.update(+id, updateUserPermissonDto);
+    const response = new SResponse({
+      code: 0,
+      message: '更新成功',
+      data: result,
+    });
+
+    return response;
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userPermissonService.remove(+id);
+  async remove(@Param('id') id: string) {
+    const result = await this.userPermissonService.remove(+id);
+    const response = new SResponse({
+      code: 0,
+      message: '删除成功',
+      data: result,
+    });
+
+    return response;
   }
 }

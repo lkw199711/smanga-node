@@ -2,7 +2,7 @@
  * @Author: 梁楷文 lkw199711@163.com
  * @Date: 2024-05-10 10:05:07
  * @LastEditors: 梁楷文 lkw199711@163.com
- * @LastEditTime: 2024-05-10 19:10:03
+ * @LastEditTime: 2024-05-13 10:50:03
  * @FilePath: \smanga-node\src\media\entities\media.entity.ts
  */
 import {
@@ -14,8 +14,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-@Index('name', ['mediaName'], { unique: true })
-@Index('nameId', ['mediaId', 'mediaName'], { unique: true })
+@Index('oname', ['mediaName'], { unique: true })
 @Entity('media', { schema: 'smanga' })
 export class Media {
   @PrimaryGeneratedColumn({
@@ -25,7 +24,6 @@ export class Media {
   mediaId: number;
 
   @Column('varchar', {
-    unique: true,
     comment: '媒体库名称',
   })
   mediaName: string;
@@ -34,11 +32,10 @@ export class Media {
   mediaType: number;
 
   @Column('varchar', {
-    unique: true,
     comment: '媒体库分级',
     default: () => "'child'",
   })
-  mediaRating: string;
+  mediaRating: string | 'child' | 'teen' | 'adult' | 'all';
 
   @Column('varchar', {
     nullable: true,

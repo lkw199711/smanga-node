@@ -2,33 +2,70 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { TagService } from './tag.service';
 import { CreateTagDto } from './dto/create-tag.dto';
 import { UpdateTagDto } from './dto/update-tag.dto';
+import { ListResponse, SResponse } from 'src/interfaces/response.interface';
 
 @Controller('tag')
 export class TagController {
   constructor(private readonly tagService: TagService) {}
 
   @Post()
-  create(@Body() createTagDto: CreateTagDto) {
-    return this.tagService.create(createTagDto);
+  async create(@Body() createTagDto: CreateTagDto) {
+    const result = await this.tagService.create(createTagDto);
+    const response = new SResponse({
+      code: 0,
+      message: '新增成功',
+      data: result,
+    });
+
+    return response;
   }
 
   @Get()
-  findAll() {
-    return this.tagService.findAll();
+  async findAll() {
+    const listResponse = await this.tagService.findAll();
+    const response = new ListResponse({
+      code: 0,
+      message: '查询成功',
+      list: listResponse.list,
+      count: listResponse.count,
+    });
+
+    return response;
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.tagService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    const result = await this.tagService.findOne(+id);
+    const response = new SResponse({
+      code: 0,
+      message: '查询成功',
+      data: result,
+    });
+
+    return response;
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTagDto: UpdateTagDto) {
-    return this.tagService.update(+id, updateTagDto);
+  async update(@Param('id') id: string, @Body() updateTagDto: UpdateTagDto) {
+    const result = await this.tagService.update(+id, updateTagDto);
+    const response = new SResponse({
+      code: 0,
+      message: '更新成功',
+      data: result,
+    });
+
+    return response;
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.tagService.remove(+id);
+  async remove(@Param('id') id: string) {
+    const result = await this.tagService.remove(+id);
+    const response = new SResponse({
+      code: 0,
+      message: '删除成功',
+      data: result,
+    });
+
+    return response;
   }
 }

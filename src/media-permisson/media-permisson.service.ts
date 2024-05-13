@@ -1,26 +1,46 @@
 import { Injectable } from '@nestjs/common';
 import { CreateMediaPermissonDto } from './dto/create-media-permisson.dto';
 import { UpdateMediaPermissonDto } from './dto/update-media-permisson.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { MediaPermisson } from './entities/media-permisson.entity';
 
 @Injectable()
 export class MediaPermissonService {
-  create(createMediaPermissonDto: CreateMediaPermissonDto) {
-    return 'This action adds a new mediaPermisson';
+  constructor(
+    @InjectRepository(MediaPermisson)
+    private readonly mediaPermissonRepository: Repository<MediaPermisson>,
+  ) { }
+  
+  async create(createMediaPermissonDto: CreateMediaPermissonDto) {
+    return await this.mediaPermissonRepository.save(createMediaPermissonDto);
   }
 
-  findAll() {
-    return `This action returns all mediaPermisson`;
+  async findAll() {
+    const list = await this.mediaPermissonRepository.find();
+    const count = await this.mediaPermissonRepository.count();
+
+    return {
+      list,
+      count,
+    };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} mediaPermisson`;
+  async findOne(id: number) {
+    const options = {
+      where: {
+        mediaPermissonId: id,
+      },
+    };
+
+    return this.mediaPermissonRepository.findOne(options);
   }
 
-  update(id: number, updateMediaPermissonDto: UpdateMediaPermissonDto) {
-    return `This action updates a #${id} mediaPermisson`;
+  async update(id: number, updateMediaPermissonDto: UpdateMediaPermissonDto) {
+    return this.mediaPermissonRepository.update(id, updateMediaPermissonDto);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} mediaPermisson`;
+  async remove(id: number) {
+    return this.mediaPermissonRepository.delete(id);
   }
 }

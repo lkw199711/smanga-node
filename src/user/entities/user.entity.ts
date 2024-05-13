@@ -2,7 +2,7 @@
  * @Author: 梁楷文 lkw199711@163.com
  * @Date: 2024-05-10 17:33:34
  * @LastEditors: 梁楷文 lkw199711@163.com
- * @LastEditTime: 2024-05-10 18:46:01
+ * @LastEditTime: 2024-05-13 14:51:47
  * @FilePath: \smanga-node\src\user\entities\user.entity.ts
  */
 import {
@@ -24,7 +24,6 @@ export class User {
   userId: number;
 
   @Column('varchar', {
-    primary: true,
     comment: '用户名',
   })
   userName: string;
@@ -51,7 +50,7 @@ export class User {
     | null;
 
   @Column('varchar', { nullable: true })
-  mediaPermit: 'all' | 'adult' | 'child' | null;
+  mediaPermit: string | 'all' | 'adult' | 'child' | null;
 
   @CreateDateColumn({ type: 'datetime', comment: '创建时间' })
   createTime: Date;

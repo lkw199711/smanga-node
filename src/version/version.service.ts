@@ -1,26 +1,46 @@
 import { Injectable } from '@nestjs/common';
 import { CreateVersionDto } from './dto/create-version.dto';
 import { UpdateVersionDto } from './dto/update-version.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Version } from './entities/version.entity';
 
 @Injectable()
 export class VersionService {
-  create(createVersionDto: CreateVersionDto) {
-    return 'This action adds a new version';
+  constructor(
+    @InjectRepository(Version)
+    private readonly versionRepository: Repository<Version>,
+  ) { }
+
+  async create(createVersionDto: CreateVersionDto) {
+    return await this.versionRepository.save(createVersionDto);
   }
 
-  findAll() {
-    return `This action returns all version`;
+  async findAll() {
+    const list = await this.versionRepository.find();
+    const count = await this.versionRepository.count();
+
+    return {
+      list,
+      count,
+    };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} version`;
+  async findOne(id: number) {
+    const options = {
+      where: {
+        versionId: id,
+      },
+    };
+
+    return this.versionRepository.findOne(options);
   }
 
-  update(id: number, updateVersionDto: UpdateVersionDto) {
-    return `This action updates a #${id} version`;
+  async update(id: number, updateVersionDto: UpdateVersionDto) {
+    return this.versionRepository.update(id, updateVersionDto);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} version`;
+  async remove(id: number) {
+    return this.versionRepository.delete(id);
   }
 }
