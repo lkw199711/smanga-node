@@ -1,16 +1,36 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+/*
+ * @Author: 梁楷文 lkw199711@163.com
+ * @Date: 2024-05-09 17:56:42
+ * @LastEditors: 梁楷文 lkw199711@163.com
+ * @LastEditTime: 2024-05-14 20:29:36
+ * @FilePath: \smanga-node\src\compress\compress.controller.ts
+ */
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { CompressService } from './compress.service';
 import { CreateCompressDto } from './dto/create-compress.dto';
 import { UpdateCompressDto } from './dto/update-compress.dto';
 import { ListResponse, SResponse } from 'src/interfaces/response.interface';
+import { UnzipService } from './compress.service';
 
 @Controller('compress')
 export class CompressController {
-  constructor(private readonly compressService: CompressService) {}
+  constructor(
+    private readonly compressService: CompressService,
+    private readonly unzipService: UnzipService,
+  ) {}
 
   @Post()
-  async create(@Body() createCompressDto: CreateCompressDto) {
-    const result = await this.compressService.create(createCompressDto);
+  async create(@Body() body: any) {
+    const result = await this.unzipService.unzip(body.zipFilePath, body.outputDir);
+    // const result = await this.compressService.create(createCompressDto);
     const response = new SResponse({
       code: 0,
       message: '新增成功',
@@ -46,7 +66,10 @@ export class CompressController {
   }
 
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() updateCompressDto: UpdateCompressDto) {
+  async update(
+    @Param('id') id: string,
+    @Body() updateCompressDto: UpdateCompressDto,
+  ) {
     const result = await this.compressService.update(+id, updateCompressDto);
     const response = new SResponse({
       code: 0,

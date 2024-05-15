@@ -2,7 +2,7 @@
  * @Author: 梁楷文 lkw199711@163.com
  * @Date: 2024-05-10 09:09:18
  * @LastEditors: 梁楷文 lkw199711@163.com
- * @LastEditTime: 2024-05-10 09:09:31
+ * @LastEditTime: 2024-05-14 16:50:44
  * @FilePath: \smanga-node\src\login\entities\login.entity.ts
  */
 import {
@@ -58,6 +58,13 @@ export class Login {
     comment: 'ip地址',
   })
   ip: string;
+
+  @Column('varchar', {
+    name: 'token',
+    nullable: false,
+    comment: 'token',
+  })
+  token: string;
 
   @Column('json', { nullable: true, comment: '代理信息' })
   userAgent: Record<string, unknown> | null;

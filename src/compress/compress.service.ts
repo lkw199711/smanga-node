@@ -2,7 +2,7 @@
  * @Author: 梁楷文 lkw199711@163.com
  * @Date: 2024-05-09 17:56:42
  * @LastEditors: 梁楷文 lkw199711@163.com
- * @LastEditTime: 2024-05-10 20:53:30
+ * @LastEditTime: 2024-05-14 20:21:48
  * @FilePath: \smanga-node\src\compress\compress.service.ts
  */
 import { Injectable } from '@nestjs/common';
@@ -11,6 +11,9 @@ import { UpdateCompressDto } from './dto/update-compress.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Compress } from './entities/compress.entity';
+import * as StreamZip from 'node-stream-zip';
+import * as fs from 'fs';
+import * as path from 'path';
 
 @Injectable()
 export class CompressService {
@@ -48,5 +51,27 @@ export class CompressService {
 
   remove(id: number) {
     return this.compressRepository.delete(id);
+  }
+}
+
+export class UnzipService {
+  async unzip(zipFilePath: string, outputDir: string): Promise<void> {
+    const zip = new StreamZip.async({ file: zipFilePath });
+
+    // Ensure output directory exists
+    if (!fs.existsSync(outputDir)) {
+      fs.mkdirSync(outputDir, { recursive: true });
+    }
+
+    try {
+      // Extract the entire archive
+      await zip.extract(null, outputDir);
+      console.log(`Extracted to ${outputDir}`);
+    } catch (err) {
+      console.error('Error extracting ZIP file', err);
+      throw err;
+    } finally {
+      await zip.close();
+    }
   }
 }

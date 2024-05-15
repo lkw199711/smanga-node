@@ -3,10 +3,11 @@ import { CompressService } from './compress.service';
 import { CompressController } from './compress.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Compress } from './entities/compress.entity';
+import { UnzipService } from './compress.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Compress])],
   controllers: [CompressController],
-  providers: [CompressService],
+  providers: [CompressService, UnzipService],
 })
 export class CompressModule {}

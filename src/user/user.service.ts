@@ -10,7 +10,7 @@ export class UserService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-  ) { }
+  ) {}
 
   async create(createUserDto: CreateUserDto) {
     return await this.userRepository.save(createUserDto);
@@ -26,11 +26,9 @@ export class UserService {
     };
   }
 
-  async findOne(id: number) {
+  async findOne(where: any) {
     const options = {
-      where: {
-        userId: id,
-      },
+      where
     };
 
     return this.userRepository.findOne(options);

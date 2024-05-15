@@ -2,11 +2,11 @@
  * @Author: 梁楷文 lkw199711@163.com
  * @Date: 2024-04-24 15:24:38
  * @LastEditors: 梁楷文 lkw199711@163.com
- * @LastEditTime: 2024-05-09 08:59:50
+ * @LastEditTime: 2024-05-13 16:23:50
  * @FilePath: \smanga-node\src\app.module.ts
  * @Description:
  */
-import { Module } from '@nestjs/common';
+import { Module, MiddlewareConsumer } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -33,6 +33,8 @@ import { UserModule } from './user/user.module';
 import { UserPermissonModule } from './user-permisson/user-permisson.module';
 import { MediaPermissonModule } from './media-permisson/media-permisson.module';
 import { LatestModule } from './latest/latest.module';
+import { AuthMiddleware } from './middleware/auth.middleware';
+import { ImageModule } from './image/image.module';
 
 @Module({
   imports: [
@@ -77,6 +79,7 @@ import { LatestModule } from './latest/latest.module';
     UserPermissonModule,
     MediaPermissonModule,
     LatestModule,
+    ImageModule,
   ],
   controllers: [AppController],
   providers: [
@@ -91,4 +94,8 @@ import { LatestModule } from './latest/latest.module';
     },
   ],
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(AuthMiddleware).forRoutes('*'); // 应用到所有路由
+  }
+}
