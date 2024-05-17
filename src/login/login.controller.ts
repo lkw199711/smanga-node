@@ -73,7 +73,7 @@ export class LoginController {
     const listResponse = await this.loginService.findAll();
     const response = new ListResponse({
       code: 0,
-      message: '查询成功',
+      message: '',
       list: listResponse.list,
       count: listResponse.count,
     });
@@ -86,7 +86,7 @@ export class LoginController {
     const result = await this.loginService.findOne(+id);
     const response = new SResponse({
       code: 0,
-      message: '查询成功',
+      message: '',
       data: result,
     });
 

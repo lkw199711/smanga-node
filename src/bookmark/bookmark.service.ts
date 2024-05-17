@@ -24,13 +24,13 @@ export class BookmarkService {
     return this.bookmarkRepository.save(createBookmarkDto);
   }
 
-  async findAll() {
-    const list = await this.bookmarkRepository.find({
-      where: {},
-      order: {
-        bookmarkId: 'DESC',
-      },
-    });
+  async findAll(page: number, pageSize: number) {
+    const options = {
+      take: pageSize,
+      skip: (page - 1) * pageSize,
+    };
+    
+    const list = await this.bookmarkRepository.find(page ? options : {});
     const count = await this.bookmarkRepository.count({
       where: {},
     });

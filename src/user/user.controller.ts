@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -9,7 +9,8 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
-  async create(@Body() createUserDto: CreateUserDto) {
+  async create(@Body() body: any) {
+    const createUserDto = body.data;
     const result = await this.userService.create(createUserDto);
     const response = new SResponse({
       code: 0,
@@ -21,11 +22,14 @@ export class UserController {
   }
 
   @Get()
-  async findAll() {
-    const listResponse = await this.userService.findAll();
+  async findAll(@Query() query: any) {
+    const listResponse = await this.userService.findAll(
+      query.page,
+      query.pageSize,
+    );
     const response = new ListResponse({
       code: 0,
-      message: '查询成功',
+      message: '',
       list: listResponse.list,
       count: listResponse.count,
     });
@@ -38,7 +42,7 @@ export class UserController {
     const result = await this.userService.findOne(+id);
     const response = new SResponse({
       code: 0,
-      message: '查询成功',
+      message: '',
       data: result,
     });
 
@@ -46,7 +50,8 @@ export class UserController {
   }
 
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+  async update(@Param('id') id: string, @Body() body: any) {
+    const updateUserDto = body.data;
     const result = await this.userService.update(+id, updateUserDto);
     const response = new SResponse({
       code: 0,

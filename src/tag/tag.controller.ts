@@ -1,4 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+/*
+ * @Author: 梁楷文 lkw199711@163.com
+ * @Date: 2024-05-10 11:38:55
+ * @LastEditors: 梁楷文 lkw199711@163.com
+ * @LastEditTime: 2024-05-17 16:25:14
+ * @FilePath: \smanga-node\src\tag\tag.controller.ts
+ */
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { TagService } from './tag.service';
 import { CreateTagDto } from './dto/create-tag.dto';
 import { UpdateTagDto } from './dto/update-tag.dto';
@@ -9,7 +16,8 @@ export class TagController {
   constructor(private readonly tagService: TagService) {}
 
   @Post()
-  async create(@Body() createTagDto: CreateTagDto) {
+  async create(@Body() body: any) {
+    const createTagDto = body.data;
     const result = await this.tagService.create(createTagDto);
     const response = new SResponse({
       code: 0,
@@ -21,11 +29,11 @@ export class TagController {
   }
 
   @Get()
-  async findAll() {
-    const listResponse = await this.tagService.findAll();
+  async findAll(@Query() query: any){
+    const listResponse = await this.tagService.findAll(query.page, query.pageSize);
     const response = new ListResponse({
       code: 0,
-      message: '查询成功',
+      message: '',
       list: listResponse.list,
       count: listResponse.count,
     });
@@ -38,7 +46,7 @@ export class TagController {
     const result = await this.tagService.findOne(+id);
     const response = new SResponse({
       code: 0,
-      message: '查询成功',
+      message: '',
       data: result,
     });
 
@@ -46,7 +54,8 @@ export class TagController {
   }
 
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() updateTagDto: UpdateTagDto) {
+  async update(@Param('id') id: string, @Body() body: any) {
+    const updateTagDto = body.data;
     const result = await this.tagService.update(+id, updateTagDto);
     const response = new SResponse({
       code: 0,

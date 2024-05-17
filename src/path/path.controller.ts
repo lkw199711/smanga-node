@@ -1,4 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+/*
+ * @Author: 梁楷文 lkw199711@163.com
+ * @Date: 2024-05-10 10:57:47
+ * @LastEditors: 梁楷文 lkw199711@163.com
+ * @LastEditTime: 2024-05-17 11:09:20
+ * @FilePath: \smanga-node\src\path\path.controller.ts
+ */
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { PathService } from './path.service';
 import { CreatePathDto } from './dto/create-path.dto';
 import { UpdatePathDto } from './dto/update-path.dto';
@@ -9,7 +16,8 @@ export class PathController {
   constructor(private readonly pathService: PathService) {}
 
   @Post()
-  async create(@Body() createPathDto: CreatePathDto) {
+  async create(@Body() body: any) {
+    const createPathDto = body.data;
     const result = await this.pathService.create(createPathDto);
     const response = new SResponse({
       code: 0,
@@ -21,11 +29,11 @@ export class PathController {
   }
 
   @Get()
-  async findAll() {
-    const listResponse = await this.pathService.findAll();
+  async findAll(@Query() query: any){
+    const listResponse = await this.pathService.findAll(query.page, query.pageSize);
     const response = new ListResponse({
       code: 0,
-      message: '查询成功',
+      message: '',
       list: listResponse.list,
       count: listResponse.count,
     });
@@ -38,7 +46,7 @@ export class PathController {
     const result = await this.pathService.findOne(+id);
     const response = new SResponse({
       code: 0,
-      message: '查询成功',
+      message: '',
       data: result,
     });
 

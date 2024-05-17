@@ -1,3 +1,10 @@
+/*
+ * @Author: 梁楷文 lkw199711@163.com
+ * @Date: 2024-05-10 10:03:52
+ * @LastEditors: 梁楷文 lkw199711@163.com
+ * @LastEditTime: 2024-05-16 19:08:58
+ * @FilePath: \smanga-node\src\manga-tag\manga-tag.controller.ts
+ */
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { MangaTagService } from './manga-tag.service';
 import { CreateMangaTagDto } from './dto/create-manga-tag.dto';
@@ -25,7 +32,7 @@ export class MangaTagController {
     const listResponse = await this.mangaTagService.findAll();
     const response = new ListResponse({
       code: 0,
-      message: '查询成功',
+      message: '',
       list: listResponse.list,
       count: listResponse.count,
     });
@@ -38,7 +45,7 @@ export class MangaTagController {
     const result = await this.mangaTagService.findOne(+id);
     const response = new SResponse({
       code: 0,
-      message: '查询成功',
+      message: '',
       data: result,
     });
 

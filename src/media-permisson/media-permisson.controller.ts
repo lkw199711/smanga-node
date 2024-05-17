@@ -32,7 +32,7 @@ export class MediaPermissonController {
     const listResponse = await this.mediaPermissonService.findAll();
     const response = new ListResponse({
       code: 0,
-      message: '查询成功',
+      message: '',
       list: listResponse.list,
       count: listResponse.count,
     });
@@ -45,7 +45,7 @@ export class MediaPermissonController {
     const result = await this.mediaPermissonService.findOne(+id);
     const response = new SResponse({
       code: 0,
-      message: '查询成功',
+      message: '',
       data: result,
     });
 

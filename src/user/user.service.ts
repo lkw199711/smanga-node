@@ -1,3 +1,10 @@
+/*
+ * @Author: 梁楷文 lkw199711@163.com
+ * @Date: 2024-05-10 17:33:34
+ * @LastEditors: 梁楷文 lkw199711@163.com
+ * @LastEditTime: 2024-05-16 20:22:21
+ * @FilePath: \smanga-node\src\user\user.service.ts
+ */
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -16,8 +23,11 @@ export class UserService {
     return await this.userRepository.save(createUserDto);
   }
 
-  async findAll() {
-    const list = await this.userRepository.find();
+  async findAll(page, pageSize) {
+    const list = await this.userRepository.find({
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+    });
     const count = await this.userRepository.count();
 
     return {

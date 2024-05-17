@@ -13,6 +13,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { CompressService } from './compress.service';
 import { CreateCompressDto } from './dto/create-compress.dto';
@@ -29,8 +30,9 @@ export class CompressController {
 
   @Post()
   async create(@Body() body: any) {
-    const result = await this.unzipService.unzip(body.zipFilePath, body.outputDir);
-    // const result = await this.compressService.create(createCompressDto);
+    const createCompressDto = body.data;
+    // const result = await this.unzipService.unzip(body.zipFilePath, body.outputDir);
+    const result = await this.compressService.create(createCompressDto);
     const response = new SResponse({
       code: 0,
       message: '新增成功',
@@ -41,11 +43,11 @@ export class CompressController {
   }
 
   @Get()
-  async findAll() {
-    const listResponse = await this.compressService.findAll();
+  async findAll(@Query() query: any){
+    const listResponse = await this.compressService.findAll(query.page, query.pageSize);
     const response = new ListResponse({
       code: 0,
-      message: '查询成功',
+      message: '',
       list: listResponse.list,
       count: listResponse.count,
     });
@@ -58,7 +60,7 @@ export class CompressController {
     const result = await this.compressService.findOne(+id);
     const response = new SResponse({
       code: 0,
-      message: '查询成功',
+      message: '',
       data: result,
     });
 

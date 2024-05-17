@@ -13,6 +13,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { ChapterService } from './chapter.service';
 import { CreateChapterDto } from './dto/create-chapter.dto';
@@ -25,7 +26,8 @@ export class ChapterController {
   constructor(private readonly chapterService: ChapterService) {}
 
   @Post()
-  async create(@Body() createChapterDto: any) {
+  async create(@Body() body: any) {
+    const createChapterDto = body.data;
     const saveChapter = await this.chapterService.create(createChapterDto);
     const response = new SResponse({
       code: 0,
@@ -37,11 +39,11 @@ export class ChapterController {
   }
 
   @Get()
-  async findAll() {
-    const listResponse = await this.chapterService.findAll();
+  async findAll(@Query() query: any) {
+    const listResponse = await this.chapterService.findAll(query.page, query.pageSize);
     const response = new ListResponse({
       code: 0,
-      message: '查询成功',
+      message: '',
       list: listResponse.list,
       count: listResponse.count,
     });
@@ -54,7 +56,7 @@ export class ChapterController {
     const chapterTarget = await this.chapterService.findOne(+chapterId);
     const response = new SResponse({
       code: 0,
-      message: '查询成功',
+      message: '',
       data: chapterTarget,
     });
 
@@ -64,8 +66,9 @@ export class ChapterController {
   @Patch(':id')
   async update(
     @Param('id') id: string,
-    @Body() updateChapterDto: UpdateChapterDto,
+    @Body() body: any,
   ) {
+    const updateChapterDto = body.data;
     const res = await this.chapterService.update(+id, updateChapterDto);
     const response = new SResponse({
       code: 0,

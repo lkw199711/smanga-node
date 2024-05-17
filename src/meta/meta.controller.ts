@@ -1,3 +1,10 @@
+/*
+ * @Author: 梁楷文 lkw199711@163.com
+ * @Date: 2024-05-10 10:44:31
+ * @LastEditors: 梁楷文 lkw199711@163.com
+ * @LastEditTime: 2024-05-16 19:09:41
+ * @FilePath: \smanga-node\src\meta\meta.controller.ts
+ */
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { MetaService } from './meta.service';
 import { CreateMetaDto } from './dto/create-meta.dto';
@@ -25,7 +32,7 @@ export class MetaController {
     const listResponse = await this.metaService.findAll();
     const response = new ListResponse({
       code: 0,
-      message: '查询成功',
+      message: '',
       list: listResponse.list,
       count: listResponse.count,
     });
@@ -38,7 +45,7 @@ export class MetaController {
     const result = await this.metaService.findOne(+id);
     const response = new SResponse({
       code: 0,
-      message: '查询成功',
+      message: '',
       data: result,
     });
 

@@ -2,7 +2,7 @@
  * @Author: 梁楷文 lkw199711@163.com
  * @Date: 2024-05-10 17:33:34
  * @LastEditors: 梁楷文 lkw199711@163.com
- * @LastEditTime: 2024-05-13 14:51:47
+ * @LastEditTime: 2024-05-17 17:12:52
  * @FilePath: \smanga-node\src\user\entities\user.entity.ts
  */
 import {
@@ -51,6 +51,9 @@ export class User {
 
   @Column('varchar', { nullable: true })
   mediaPermit: string | 'all' | 'adult' | 'child' | null;
+
+  @Column('json', { nullable: true })
+  userConfig: Record<string, any> | null;
 
   @CreateDateColumn({ type: 'datetime', comment: '创建时间' })
   createTime: Date;

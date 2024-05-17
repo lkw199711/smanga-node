@@ -74,11 +74,9 @@ export class TokenService {
     };
   }
 
-  async findOne(id: number) {
+  async findOne(where: any) {
     const options = {
-      where: {
-        tokenId: id,
-      },
+      where,
     };
 
     return this.tokenRepository.findOne(options);

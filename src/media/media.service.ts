@@ -10,14 +10,18 @@ export class MediaService {
   constructor(
     @InjectRepository(Media)
     private readonly mediaRepository: Repository<Media>,
-  ) { }
+  ) {}
 
   async create(createMediaDto: CreateMediaDto) {
     return await this.mediaRepository.save(createMediaDto);
   }
 
-  async findAll() {
-    const list = await this.mediaRepository.find();
+  async findAll(page, pageSize) {
+    const options = {
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+    };
+    const list = await this.mediaRepository.find(page ? options : {});
     const count = await this.mediaRepository.count();
 
     return {

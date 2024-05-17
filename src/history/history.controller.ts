@@ -32,7 +32,7 @@ export class HistoryController {
     const listResponse = await this.historyService.findAll();
     const response = new ListResponse({
       code: 0,
-      message: '查询成功',
+      message: '',
       list: listResponse.list,
       count: listResponse.count,
     });
@@ -45,7 +45,7 @@ export class HistoryController {
     const result = await this.historyService.findOne(+id);
     const response = new SResponse({
       code: 0,
-      message: '查询成功',
+      message: '',
       data: result,
     });
 

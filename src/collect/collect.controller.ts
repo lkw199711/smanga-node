@@ -1,3 +1,10 @@
+/*
+ * @Author: 梁楷文 lkw199711@163.com
+ * @Date: 2024-05-09 14:13:29
+ * @LastEditors: 梁楷文 lkw199711@163.com
+ * @LastEditTime: 2024-05-16 19:07:18
+ * @FilePath: \smanga-node\src\collect\collect.controller.ts
+ */
 import {
   Controller,
   Get,
@@ -33,7 +40,7 @@ export class CollectController {
     const listResponse = await this.collectService.findAll();
     const response = new ListResponse({
       code: 0,
-      message: '查询成功',
+      message: '',
       list: listResponse.list,
       count: listResponse.count,
     });
@@ -46,7 +53,7 @@ export class CollectController {
     const result = await this.collectService.findOne(+id);
     const response = new SResponse({
       code: 0,
-      message: '查询成功',
+      message: '',
       data: result,
     });
 

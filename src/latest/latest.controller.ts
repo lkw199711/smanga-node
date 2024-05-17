@@ -1,3 +1,10 @@
+/*
+ * @Author: 梁楷文 lkw199711@163.com
+ * @Date: 2024-05-10 19:25:21
+ * @LastEditors: 梁楷文 lkw199711@163.com
+ * @LastEditTime: 2024-05-16 19:07:58
+ * @FilePath: \smanga-node\src\latest\latest.controller.ts
+ */
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { LatestService } from './latest.service';
 import { CreateLatestDto } from './dto/create-latest.dto';
@@ -13,7 +20,7 @@ export class LatestController {
     const result = await this.latestService.create(createLatestDto);
     const response = new SResponse({
       code: 0,
-      message: '新增成功',
+      message: '',
       data: result,
     });
 
@@ -25,7 +32,7 @@ export class LatestController {
     const listResponse = await this.latestService.findAll();
     const response = new ListResponse({
       code: 0,
-      message: '查询成功',
+      message: '',
       list: listResponse.list,
       count: listResponse.count,
     });
@@ -38,7 +45,7 @@ export class LatestController {
     const result = await this.latestService.findOne(+id);
     const response = new SResponse({
       code: 0,
-      message: '查询成功',
+      message: '',
       data: result,
     });
 

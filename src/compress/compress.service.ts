@@ -2,7 +2,7 @@
  * @Author: 梁楷文 lkw199711@163.com
  * @Date: 2024-05-09 17:56:42
  * @LastEditors: 梁楷文 lkw199711@163.com
- * @LastEditTime: 2024-05-14 20:21:48
+ * @LastEditTime: 2024-05-17 16:47:13
  * @FilePath: \smanga-node\src\compress\compress.service.ts
  */
 import { Injectable } from '@nestjs/common';
@@ -25,8 +25,13 @@ export class CompressService {
     return await this.compressRepository.save(createCompressDto);
   }
 
-  async findAll() {
-    const list = await this.compressRepository.find();
+  async findAll(page: number, pageSize: number) {
+    const options = {
+      take: pageSize,
+      skip: (page - 1) * pageSize,
+    };
+
+    const list = await this.compressRepository.find(page ? options : {});
     const count = await this.compressRepository.count();
     
     return {

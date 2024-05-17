@@ -16,8 +16,13 @@ export class TagService {
     return await this.tagRepository.save(createTagDto);
   }
 
-  async findAll() {
-    const list = await this.tagRepository.find();
+  async findAll(page: number, pageSize: number) {
+    const options = {
+      take: pageSize,
+      skip: (page - 1) * pageSize,
+    };
+    
+    const list = await this.tagRepository.find(page ? options : {});
     const count = await this.tagRepository.count();
 
     return {

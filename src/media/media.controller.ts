@@ -1,4 +1,20 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+/*
+ * @Author: 梁楷文 lkw199711@163.com
+ * @Date: 2024-05-10 10:05:07
+ * @LastEditors: 梁楷文 lkw199711@163.com
+ * @LastEditTime: 2024-05-16 20:37:13
+ * @FilePath: \smanga-node\src\media\media.controller.ts
+ */
+import {
+  Controller,
+  Get,
+  Query,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { MediaService } from './media.service';
 import { CreateMediaDto } from './dto/create-media.dto';
 import { UpdateMediaDto } from './dto/update-media.dto';
@@ -9,7 +25,8 @@ export class MediaController {
   constructor(private readonly mediaService: MediaService) {}
 
   @Post()
-  async create(@Body() createMediaDto: CreateMediaDto) {
+  async create(@Body() body: any) {
+    const createMediaDto = body.data;
     const result = await this.mediaService.create(createMediaDto);
     const response = new SResponse({
       code: 0,
@@ -21,11 +38,11 @@ export class MediaController {
   }
 
   @Get()
-  async findAll() {
-    const listResponse = await this.mediaService.findAll();
+  async findAll(@Query() query: any) {
+    const listResponse = await this.mediaService.findAll(query.page, query.pageSize);
     const response = new ListResponse({
       code: 0,
-      message: '查询成功',
+      message: '',
       list: listResponse.list,
       count: listResponse.count,
     });
@@ -38,7 +55,7 @@ export class MediaController {
     const result = await this.mediaService.findOne(+id);
     const response = new SResponse({
       code: 0,
-      message: '查询成功',
+      message: '',
       data: result,
     });
 
@@ -46,7 +63,11 @@ export class MediaController {
   }
 
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() updateMediaDto: UpdateMediaDto) {
+  async update(
+    @Param('id') id: string,
+    @Body() body: any,
+  ) {
+    const updateMediaDto = body.data;
     const result = await this.mediaService.update(+id, updateMediaDto);
     const response = new SResponse({
       code: 0,
