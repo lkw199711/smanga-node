@@ -2,14 +2,14 @@
  * @Author: 梁楷文 lkw199711@163.com
  * @Date: 2024-05-13 16:03:02
  * @LastEditors: 梁楷文 lkw199711@163.com
- * @LastEditTime: 2024-05-16 19:27:38
+ * @LastEditTime: 2024-05-23 19:01:31
  * @FilePath: \smanga-node\src\middleware\auth.middleware.ts
  */
 // auth.middleware.ts
 
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
-import { TokenService } from 'src/login/login.service';
+import { TokenService } from 'src/services/login.service';
 import { SResponse } from 'src/interfaces/response.interface';
 
 @Injectable()
