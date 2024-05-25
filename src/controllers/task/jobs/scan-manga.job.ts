@@ -2,7 +2,7 @@
  * @Author: 梁楷文 lkw199711@163.com
  * @Date: 2024-05-23 19:56:11
  * @LastEditors: 梁楷文 lkw199711@163.com
- * @LastEditTime: 2024-05-25 18:52:14
+ * @LastEditTime: 2024-05-25 16:00:11
  * @FilePath: \smanga-node\src\controllers\task\jobs\scan.job.ts
  */
 import { Injectable } from '@nestjs/common';
@@ -15,44 +15,29 @@ import { dev_log } from 'src/utils';
 import * as fs from 'fs';
 import * as path from 'path';
 import { TaskPriority } from 'src/type';
-import { InjectRepository, InjectDataSource } from '@nestjs/typeorm';
-import { Repository, DataSource } from 'typeorm';
-import { Path } from 'src/entities/path.entity';
-import { Media } from 'src/entities/media.entity';
 
 @Injectable()
-export class ScanJob {
+export class ScanMangaJob {
   constructor(
     private readonly scanService: ScanService,
     private readonly logService: LogService,
     private readonly mangaService: MangaService,
     private readonly taskService: TaskService,
     private readonly pathService: PathService,
-
-    @InjectRepository(Path)
-    private readonly pathRepository: Repository<Path>,
-
-    @InjectRepository(Media)
-    private readonly mediaRepository: Repository<Media>,
-
-    @InjectDataSource()
-    private readonly dataSource: DataSource,
   ) {}
 
-  async handle({ pathId, pathContent, directoryFormat, include, exclude }) {
-    const res = await this.dataSource.manager
-      // .getRepository(Path)
-      // .getRepository(Media)
-      .createQueryBuilder()
-      .innerJoinAndSelect(Media, 'media', 'path.mediaId = media.mediaId')
-      // .innerJoinAndSelect('path.media', 'media')
-      // .innerJoinAndSelect(Path, 'path', 'media.mediaId = path.mediaId')
-      .select(['path.*', 'media.*'])
-      .where('path.pathId = :pathId', { pathId })
-      // .getSql();
-      .getMany();
-    dev_log(res);
-    return false;
+  async handle({
+    pathId,
+    mediaId,
+    browseType,
+    mediaType,
+    direction,
+    removeFirst,
+    pathContent,
+    directoryFormat,
+    include,
+    exclude,
+  }) {
     // 获取路径信息
     if (!pathContent) {
       const res = await this.pathService.findOne(pathId);
@@ -115,7 +100,6 @@ export class ScanJob {
           pathContent: pathContent,
           mangaList: mangaList,
           pathId: pathId,
-          mangaCount: mangaList.length,
         },
       });
     }

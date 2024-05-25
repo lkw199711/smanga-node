@@ -2,13 +2,14 @@
  * @Author: 梁楷文 lkw199711@163.com
  * @Date: 2024-05-10 10:57:47
  * @LastEditors: 梁楷文 lkw199711@163.com
- * @LastEditTime: 2024-05-23 19:53:30
+ * @LastEditTime: 2024-05-25 15:08:21
  * @FilePath: \smanga-node\src\path\path.controller.ts
  */
 import {
   Controller,
   Get,
   Post,
+  Put,
   Body,
   Patch,
   Param,
@@ -20,6 +21,8 @@ import { CreatePathDto } from './dto/create-path.dto';
 import { UpdatePathDto } from './dto/update-path.dto';
 import { ListResponse, SResponse } from 'src/interfaces/response.interface';
 import { TaskService } from 'src/controllers/task/task.service';
+import { Task } from 'src/entities/task.entity';
+import { TaskPriority } from 'src/type';
 
 @Controller('path')
 export class PathController {
@@ -42,11 +45,12 @@ export class PathController {
     // 新增扫描任务
     this.taskService.create({
       taskName: 'scan',
+      ptiority: TaskPriority.scan,
       command: 'task_scan',
       args: result,
       status: 'pending',
     });
-    
+
     return response;
   }
 
@@ -55,7 +59,9 @@ export class PathController {
     const listResponse = await this.pathService.findAll(
       query.page,
       query.pageSize,
+      query.mediaId,
     );
+
     const response = new ListResponse({
       code: 0,
       message: '',
@@ -73,6 +79,25 @@ export class PathController {
       code: 0,
       message: '',
       data: result,
+    });
+
+    return response;
+  }
+
+  @Put('scan/:id')
+  Scan(@Param('id') id: string) {
+    // 新增扫描任务
+    this.taskService.create({
+      taskName: 'scan',
+      ptiority: TaskPriority.scan,
+      command: 'task_scan',
+      args: { pathId: id },
+      status: 'pending',
+    });
+
+    const response = new SResponse({
+      code: 0,
+      message: '扫描任务已提交'
     });
 
     return response;
@@ -101,21 +126,4 @@ export class PathController {
 
     return response;
   }
-}
-
-/**
- * @description: 扫描路径
- * @param {*} param1
- * @return {*}
- */
-function task_scan({ path }) {
-  // 获取路径信息
-
-  // 如果目录正在被扫描,则放弃本次扫描任务
-
-  // 扫面任务开始
-
-  // 是否扫面二级目录
-
-  console.log(`扫描路径：${path}`);
 }

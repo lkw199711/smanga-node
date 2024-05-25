@@ -2,7 +2,7 @@
  * @Author: 梁楷文 lkw199711@163.com
  * @Date: 2024-05-10 10:05:07
  * @LastEditors: 梁楷文 lkw199711@163.com
- * @LastEditTime: 2024-05-23 17:49:31
+ * @LastEditTime: 2024-05-25 16:18:15
  * @FilePath: \smanga-node\src\media\entities\media.entity.ts
  */
 import {
@@ -12,7 +12,9 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
+import { Path } from 'src/entities/path.entity';
 
 @Index('oname', ['mediaName'], { unique: true })
 @Entity('media', { schema: 'smanga' })
@@ -77,4 +79,7 @@ export class Media {
 
   @UpdateDateColumn({ type: 'datetime', comment: '更新时间' })
   updateTime: Date;
+
+  @OneToMany(() => Path, (path) => path.mediaId)
+  paths: Path[];
 }

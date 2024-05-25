@@ -2,7 +2,7 @@
  * @Author: 梁楷文 lkw199711@163.com
  * @Date: 2024-04-24 15:24:38
  * @LastEditors: 梁楷文 lkw199711@163.com
- * @LastEditTime: 2024-05-23 19:44:40
+ * @LastEditTime: 2024-05-25 18:27:26
  * @FilePath: \smanga-node\src\app.module.ts
  * @Description:
  */
@@ -36,7 +36,6 @@ import { MediaPermissonController } from './controllers/media-permisson/media-pe
 import { LatestController } from './controllers/latest/latest.controller';
 import { ImageController } from './controllers/image/image.controller';
 import { TaskController } from './controllers/task/task.controller';
-import { SqlModule } from './modules/sql.module';
 
 // 引入实体
 import { Bookmark } from 'src/entities/bookmark.entity';
@@ -87,9 +86,20 @@ import { UserPermissonService } from './services/user-permisson.service';
 import { UserService } from './services/user.service';
 import { VersionService } from './services/version.service';
 import { TaskScheduler } from './controllers/task/task.scheduler';
+import { Utils } from './utils';
+import * as path from 'path';
 
 // 引入任务模块
 import { ScheduleModule } from '@nestjs/schedule';
+import { ScanJob } from './controllers/task/jobs/scan.job';
+import { ScanMangaJob } from './controllers/task/jobs/scan-manga.job';
+
+import { ConfigModule } from '@nestjs/config';
+const getEnvFileName = () => {
+  const RUNNING_ENV = process.env.RUNNING_ENV;
+  console.log('RUNNING_ENV: ', RUNNING_ENV);
+  return path.join(process.cwd(), `./config/env.${RUNNING_ENV}`);
+};
 
 @Module({
   imports: [
@@ -99,6 +109,10 @@ import { ScheduleModule } from '@nestjs/schedule';
     //   entities: [__dirname + '/**/*.entity{.ts,.js}'], // 你的实体类路径
     //   synchronize: true, // 是否自动同步数据库结构，生产环境应该设为 false
     // }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: `${getEnvFileName()}`,
+    }),
     ScheduleModule.forRoot(),
     TypeOrmModule.forRoot({
       type: 'mysql',
@@ -141,7 +155,6 @@ import { ScheduleModule } from '@nestjs/schedule';
       Version,
     ]),
     DemoModule,
-    SqlModule,
   ],
   controllers: [
     AppController,
@@ -199,8 +212,11 @@ import { ScheduleModule } from '@nestjs/schedule';
     TaskService,
     TokenService,
     TaskScheduler,
-
+    ScanJob,
+    ScanMangaJob,
+    Utils,
   ],
+  exports: [PathService],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {

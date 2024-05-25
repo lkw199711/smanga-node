@@ -2,7 +2,7 @@
  * @Author: 梁楷文 lkw199711@163.com
  * @Date: 2024-05-21 10:29:39
  * @LastEditors: 梁楷文 lkw199711@163.com
- * @LastEditTime: 2024-05-23 20:28:49
+ * @LastEditTime: 2024-05-25 15:17:32
  * @FilePath: \smanga-node\src\task\entities\task.entity.ts
  */
 import {
@@ -21,7 +21,10 @@ export class Task {
   @Column('varchar', { default: "'default'", comment: '任务名称' })
   taskName: string | 'delete' | 'scan' | 'compress' | 'default';
 
-  @Column('varchar', { comment: '任务状态' })
+  @Column('int', { default: 10, comment: '任务优先级' })
+  priority: string;
+
+  @Column('varchar', { default: 'pending', comment: '任务状态' })
   status: string;
 
   @Column('text', { comment: '任务命令' })

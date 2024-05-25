@@ -1,4 +1,3 @@
-import { loadFiles } from 'src/utils/load-files';
 import { join } from 'path';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -30,11 +29,29 @@ import { Version } from 'src/entities/version.entity';
 // 引入服务
 import { BookmarkService } from 'src/services/bookmark.service';
 import { TokenService } from 'src/services/login.service';
+import { ChapterService } from 'src/services/chapter.service';
+import { CollectService } from 'src/services/collect.service';
+import { CompressService } from 'src/services/compress.service';
+import { UnzipService } from 'src/services/compress.service';
+import { HistoryService } from 'src/services/history.service';
+import { LatestService } from 'src/services/latest.service';
+import { LogService } from 'src/services/log.service';
+import { LoginService } from 'src/services/login.service';
+import { MangaService } from 'src/services/manga.service';
+import { MangaTagService } from 'src/services/manga-tag.service';
+import { MediaService } from 'src/services/media.service';
+import { MediaPermissonService } from 'src/services/media-permisson.service';
+import { MetaService } from 'src/services/meta.service';
+import { PathService } from 'src/services/path.service';
+import { ScanService } from 'src/services/scan.service';
+import { TagService } from 'src/services/tag.service';
+import { TaskService } from 'src/controllers/task/task.service';
+import { UserPermissonService } from 'src/services/user-permisson.service';
+import { UserService } from 'src/services/user.service';
+import { VersionService } from 'src/services/version.service';
+import { TaskScheduler } from 'src/controllers/task/task.scheduler';
 
 const entitiesDir = join(__dirname, '../entities');
-const entities = loadFiles(entitiesDir, '.entity.ts');
-
-const services = loadFiles(join(__dirname, '../services'), '.service.ts');
 
 @Module({
   imports: [
@@ -78,7 +95,55 @@ const services = loadFiles(join(__dirname, '../services'), '.service.ts');
       Version,
     ]),
   ],
-  providers: [BookmarkService, TokenService, ...services],
-  exports: [BookmarkService, TokenService, ...services],
+  providers: [
+    BookmarkService,
+    ChapterService,
+    CollectService,
+    CompressService,
+    UnzipService,
+    HistoryService,
+    LatestService,
+    LogService,
+    LoginService,
+    MangaService,
+    MangaTagService,
+    MediaService,
+    MediaPermissonService,
+    MetaService,
+    PathService,
+    ScanService,
+    TagService,
+    UserService,
+    UserPermissonService,
+    VersionService,
+    TaskService,
+    TokenService,
+    TaskScheduler,
+  ],
+  exports: [
+    BookmarkService,
+    ChapterService,
+    CollectService,
+    CompressService,
+    UnzipService,
+    HistoryService,
+    LatestService,
+    LogService,
+    LoginService,
+    MangaService,
+    MangaTagService,
+    MediaService,
+    MediaPermissonService,
+    MetaService,
+    PathService,
+    ScanService,
+    TagService,
+    UserService,
+    UserPermissonService,
+    VersionService,
+    TaskService,
+    TokenService,
+    TaskScheduler,
+  ],
 })
 export class SqlModule {}

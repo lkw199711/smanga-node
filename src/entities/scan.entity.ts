@@ -2,7 +2,7 @@
  * @Author: 梁楷文 lkw199711@163.com
  * @Date: 2024-05-10 11:25:56
  * @LastEditors: 梁楷文 lkw199711@163.com
- * @LastEditTime: 2024-05-23 20:51:26
+ * @LastEditTime: 2024-05-24 20:51:01
  * @FilePath: \smanga-node\src\scan\entities\scan.entity.ts
  */
 import {
@@ -29,7 +29,7 @@ export class Scan {
   @Column('varchar', {
     comment: '路径',
   })
-  path: string;
+  pathContent: string;
 
   @Column('varchar', {
     nullable: true,

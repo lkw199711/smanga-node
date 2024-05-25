@@ -2,7 +2,7 @@
  * @Author: 梁楷文 lkw199711@163.com
  * @Date: 2024-05-10 10:57:47
  * @LastEditors: 梁楷文 lkw199711@163.com
- * @LastEditTime: 2024-05-23 17:50:48
+ * @LastEditTime: 2024-05-24 19:53:01
  * @FilePath: \smanga-node\src\path\entities\path.entity.ts
  */
 import {
@@ -12,9 +12,11 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToOne,
 } from 'typeorm';
+import { Media } from './media.entity';
 
-@Index('opath', ['mediaId', 'path'], { unique: true })
+@Index('opath', ['mediaId', 'pathContent'], { unique: true })
 @Entity('path', { schema: 'smanga' })
 export class Path {
   @PrimaryGeneratedColumn({
@@ -33,7 +35,7 @@ export class Path {
   pathType: string | null;
 
   @Column('varchar', { comment: '路径' })
-  path: string;
+  pathContent: string;
 
   @Column('int', { unsigned: true, comment: '自动扫描', default: () => "'0'" })
   autoScan: number;
@@ -61,4 +63,7 @@ export class Path {
 
   @UpdateDateColumn({ type: 'datetime', comment: '更新时间' })
   updateTime: Date;
+
+  @ManyToOne(() => Media, (media) => media.mediaId)
+  media: Media;
 }

@@ -1,26 +1,46 @@
 import { Injectable } from '@nestjs/common';
 import { CreateLogDto } from '../controllers/log/dto/create-log.dto';
 import { UpdateLogDto } from '../controllers/log/dto/update-log.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Log } from '../entities/log.entity';
+import { AppService } from 'src/app.service';
 
 @Injectable()
 export class LogService {
-  create(createLogDto: CreateLogDto) {
-    return 'This action adds a new log';
+  constructor(
+    @InjectRepository(Log)
+    private readonly logRepository: Repository<Log>,
+    private readonly appService: AppService,
+  ) {}
+
+  async create(createLogDto: CreateLogDto) {
+    const version = this.appService.get_version();
+    const environment = this.appService.get_system();
+    createLogDto.version = version;
+    createLogDto.environment = environment;
+    return await this.logRepository.save(createLogDto);
   }
 
-  findAll() {
-    return `This action returns all log`;
+  async findAll() {
+    const list = await this.logRepository.find();
+    const count = await this.logRepository.count();
+
+    return {
+      list,
+      count,
+    };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} log`;
+  async findOne(options) {
+    return await this.logRepository.findOne(options);
   }
 
-  update(id: number, updateLogDto: UpdateLogDto) {
-    return `This action updates a #${id} log`;
+  async update(id: number, updateLogDto: UpdateLogDto) {
+    return await this.logRepository.update(id, updateLogDto);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} log`;
+  async remove(id: number) {
+    return await this.logRepository.delete(id);
   }
 }

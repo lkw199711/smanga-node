@@ -2,7 +2,7 @@
  * @Author: 梁楷文 lkw199711@163.com
  * @Date: 2024-05-10 10:57:47
  * @LastEditors: 梁楷文 lkw199711@163.com
- * @LastEditTime: 2024-05-23 20:53:18
+ * @LastEditTime: 2024-05-24 19:52:34
  * @FilePath: \smanga-node\src\path\path.service.ts
  */
 import { Injectable } from '@nestjs/common';
@@ -12,6 +12,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Path } from '../entities/path.entity';
 import { ScanService } from './scan.service';
+import { LogService } from './log.service';
+import { MangaService } from './manga.service';
+import * as fs from 'fs';
 
 @Injectable()
 export class PathService {
@@ -19,17 +22,24 @@ export class PathService {
     @InjectRepository(Path)
     private readonly pathRepository: Repository<Path>,
     private readonly scanService: ScanService,
+    private readonly logService: LogService,
+    private readonly mangaService: MangaService,
   ) {}
 
   async create(createPathDto: CreatePathDto) {
     return await this.pathRepository.save(createPathDto);
   }
 
-  async findAll(page: number, pageSize: number) {
+  async findAll(page: number, pageSize: number, mediaId: number) {
     const options = {
       take: pageSize,
       skip: (page - 1) * pageSize,
-    };
+    } as any;
+
+    if (mediaId) {
+      options.where = { mediaId };
+    }
+
     const list = await this.pathRepository.find(page ? options : {});
     const count = await this.pathRepository.count();
 
@@ -55,37 +65,5 @@ export class PathService {
 
   async remove(id: number) {
     return this.pathRepository.delete(id);
-  }
-
-  /**
-   * @description: 扫描路径任务
-   * @param {*} param1
-   * @return {*}
-   */
-  async task_scan({ pathId, path }) {
-    // 获取路径信息
-
-    // 如果目录正在被扫描,则放弃本次扫描任务
-    const scanRecord = this.scanService.findOne({
-      where: { pathId: pathId },
-    });
-
-    if (scanRecord) {
-      console.log(`路径${path}正在被扫描中，跳过本次扫描任务`);
-      return;
-    }
-
-    // 扫面任务开始
-    this.update(pathId, { lastScanTime: new Date() });
-    this.scanService.create({
-      scanStatus: 'start',
-      path: path,
-      pathId: pathId,
-    });
-
-    // 是否扫面二级目录
-    console.log(`扫描路径：${path}`);
-
-    function scan_start() {}
   }
 }
